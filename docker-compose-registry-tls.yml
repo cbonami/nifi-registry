@@ -1,8 +1,10 @@
-version: '3'
+version: '3.1'
 
 services:
   nifi-reg:
-    image: apache/nifi-registry:0.2.0
+    image: cbonami/nifi-registry:latest
+    links:
+      - db
     ports:
       - "18443:18443"
     environment:
@@ -16,3 +18,21 @@ services:
       - INITIAL_ADMIN_IDENTITY='CN=sys_admin, OU=NIFI'
     volumes:
       - ./nifi-reg/certs/nifi-registry:/opt/certs
+
+  # https://hub.docker.com/_/postgres/
+  db:
+    image: postgres:10
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=very_secret
+      - POSTGRES_USER=nifi_registry
+    volumes:
+      - ./nifi-reg/data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    links:
+      - db
+    restart: always
+    ports:
+      - 8080:8080
