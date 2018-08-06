@@ -106,5 +106,6 @@ buildNumber.properties
 
 !/lib/*.jar
 nifi-reg/certs/*
-nifi-reg/data
+nifi-reg/db_storage
+nifi-reg/flow_storage
 nifi-toolkit*
