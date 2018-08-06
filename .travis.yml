@@ -1,23 +1,30 @@
+# https://medium.com/mobileforgood/patterns-for-continuous-integration-with-docker-on-travis-ci-71857fff14c5
 sudo: required
 services:
 - docker
+
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::7}
   - secure: R3C0A1414YACb7svik47MuMsqyRI0Rt/bwSVngGTY2z8A5Kc8SIEHyMfqypUlhqpTTiAeE8yQ44SErHnkPpad9JxGEpg5Xo05mEDbw7h4lagW6U9jPdO16Kra9ski1l8KQ4Z+nlUUermkfEFtH/pkQIHsi8FHALsohlNS0whnatFPk2mO71qCN2Uz/C8Hf66BHbf6/0wOd7I+B5V2QwsuKfmaRF1rJFBUp5NTrqrUjdrWg99AJ4wC1DEaXxBGObxHyQ668DcAUGf5aoSyqTlwa8q8Tbn/yeowppIxbGcsUAlII7EcDaI/0lSJg7qwH7D2sYZ4vW77CDPofbL+VAFXTtopXvsnZX9LifjFBQSSQAgi7ha1orXBcgcAwMfHh85TxkHnoNJhsLqygP0yiVmU7LZ29nUSHyoO4ekzGNo/SYz2XXqIZtg6/X3TxQlldbrn07BMn+31TzU8SR01TVnCWRZp9HFrsjfWrW8f6vdlFThjQCKY6lp8oerIW/d1o34veu2Xy034KZO+Kbi1cNd9LetT3ie2ovxulhQQK4jB81kEc3oxMrSl7DIfiC+LJSgZMlll5/054+C0CJzRr/Zpei7Z/e5BGSA/D+pbnclDbXcCTptS63aAv8Ucbp4/PF0+3vJ1AyOFuDAlu8pfVHjG0Y+1pMEQZKqnrh2BqDxzIE=
   - secure: h30XU2l1hl/jjOmS/Ok5TmmkcFKJi10YnMO6nQqicTiUBfMX8VFzy48J3OsoqaKWQbsvH5+ktw/MhS4Lglv28Xr54wKIuKu7vDYt7mS23tMVEX4oHOj+PmN20VdtB4eRE8fA6nx6Rpt9b9KB3Sqt7JoGO7fj0q7TG6K+lUHejst1N7bnX7D5KuPMByXy/6qbkqxcwhvbJVu/qa/invpB4GDebRGIa3NVbCdPUNxbTjK342pWaXQt+Jlu6VVrJ7W5tnWVb+jkISFiunaKdhi/hHClvQqOk3z/8yhaUQSC3ZxtPt2AlHksI2zJJ6Sh86zSAtOAkUhEr8xCmZmWkWFXntRa7itBNbJ8/OeJ1MAMT7u6JwDcT8APIeI8YYCI/jES/Pfc84HSFf5TLl7jh7ipenGrmWg0g0LQW+4TL27uJGg5rm6N+cfjiVlHGjyaM+860zqvjyJvQ3U+Gpg+3SZ0HCGtB0xTmKEvC1X/dgV5iuT2dWOk/vY0oD+09lE7pKdSnvqPuzqD3utxRu39kiVKAhfbQiuvbBQruy92FlzoMka8ebVcUVBso9FEiWhNUwMtjm8P31KsoLfqn26y6LUg/Y7lg64K+BR9TQXAuMtpHdvg36b41AZdp8zqi+wHP5QDS3cXJpIdEAm9vCpE7WS59zARPlrTH8Ftv7ClGfs0cYY=
+
 install: true
+
 before_script:
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH
   ; fi`
 - export IMAGE_NAME=cbonami/nifi-registry
 - docker pull "$IMAGE_NAME" || true
+
 script:
 - docker build -t $IMAGE_NAME:$COMMIT .
+
 after_script:
 - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
 - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:travis-$TRAVIS_BUILD_NUMBER
+
 deploy:
   provider: script
   script: docker push "${IMAGE_NAME}"
