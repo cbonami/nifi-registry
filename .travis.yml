@@ -19,17 +19,17 @@ before_script:
 
 script:
 - docker build -t $IMAGE_NAME:$COMMIT .
+- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:travis-$TRAVIS_BUILD_NUMBER
+- docker push $IMAGE_NAME
 
 after_script:
 - docker images
 
-before_deploy:
-- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
-- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:travis-$TRAVIS_BUILD_NUMBER
-
-deploy:
-  provider: script
-  script: docker push $IMAGE_NAME
-  on:
-    branch: master
+#deploy:
+#  skip_cleanup: true
+#  provider: script
+#  script:
+#  on:
+#    branch: master
