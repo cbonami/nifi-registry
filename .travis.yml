@@ -1,0 +1,30 @@
+sudo: required
+services:
+- docker
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::7}
+  - secure: eG6Rxl67j0Zy0BiCtyoBr/CSJww07MkKlmkTUCxi0vqXa91k7AMYITX+YAImeQdnfWBgYIDOiV23isn7OC4QQ1F6EV/OAU/bJ9uq4v4aTGC1tUkoMv7B7sz8yU/gKnJjB0ByWGsPTOFmQQUbTOc6urp4gyqvXi1QUChSFRXQAoCwbp6+lDwnLPmGd8fhjxpFoiGhaarXOTInE8XhE4DYu4w+gmqavg0Y589ONEnrFsW+silTciw1RZRAHrXU/QNrG6h9cD1WWRpFE7ktT0L2+8IeympC9PU1rPXs7cLrugqRCsSLd3EIhdEwWLVDpNJmLexrFfrw9IiRZBaHFRFN0z4TkUvdMIOq7V4V8ayrLNHOZVamrT5Ay7x2g1vgC9RS3s20vPyjyDZMI/r93DMSdbTPcF26cwIGPsiZBXgjkPdM9BXfzloXcgkfyepmCnFKL4jTd23gbk5rWQlqNDbVEMWh3MDqX9ssEGY3C579ntpyrtTHOcC6G3fV8mnqoc8abokhmcCIXjCljqpVRZAQydl5pLQ4TvoYUwtCIOtsQmpXr2EQk7Rz93K5rZfV8I1oRLL80PmzFRKdPTYv9e5jFyE68jwggDhro2Nv5w1ewALEepA0Hy91bm4TYWH9YMETcB+kW8xikVZoIEZmILvgyLsWlpSvUItsMTSx+7mBQjI=
+  - secure: ljgizLazvAoSpd0sWm1NhyvgBOHs3mPRE7HWgsR+bfQjEN5j/Nl5jWEV28LM1xbDUemVmxTqELFAN4dtQVxR5p49XoBmAok4AQTzrWG6tqMZQq9IndUdmdAjw/a5QRhhyY/9WsiKTaVj/HBnIS9pNQpvr/P2jey3AmWkBkLcJBd75ToTd6wURfSgsr/FrW97oDAym9xSAIu3+khjGXW+ZjCRlsrDEGMrHG7VpG0Y0NhGqSl1uQI6tWVvzJmZC5kFi6aDs5u7UomBEItGSP6EQ7lBveKbDy+mDs7t04ftqGEO6oH0tI057Mw0JONBgTjg8HaBhpmM5N4Qfhg5srfAsnNsTHRIjgGMCg4LxsjFmxwZQUgktl3hQi71UX2Rlea7CO6VzYWb8VqmafPI4K/TYmdM2b34/cZr5GVdbcC52qrfHaO5OWGnZqRQTqj1zSi9J5OVB4QX+LdLQHgiSfVQoPQbC9HC930qEPn75coz31l+hO9aV/DEm0dWNsuk0we8b5w8xmX1t2i4giihlLgI+jCEC4LVZBt12aB5YHXcDmqTx+TBk+Ko4K2xGqKjjGBkg5y6B1utEWJeVvDW9elTeTkZn+zV2bIQ+uDcuG1UIB5dTqKf73CN90/fEKJL7a92jpAoQcgiNEXFsu6YltwGVrGPGPcv6z2MS17++dEOIM0=
+  - secure: ZK1QnsWx3E3JRbK5o78TX0w6AT0hpS0YEEbltai+L4gmkvivyZqEfOkiQmNSvlefSiaAAkv3e42IhCehcfdaU4itCWOGyMnDMjzkpqt29dEI+eE47k3eXrdcTSAFjkzZDXbJbhdgaTBzE2aeY33tdvGZilxGYf30j4emM6ZAzb3bHJVqdjSYdgSIy+bJkrt4X0jqHooLWRRFbACRNfc7YKJoQIugUl1fIXQws/lKflOqBAyLZYtGyvVkygThM+yQNJnrJKNztC/vccIxk9kyrSxhan/QM4vUHNxQOaijE4sTOByxLUVSKpuHuOBpKLoqhAP7hG8UNDb9bEnwaYRyS++lT1uIMgDyLafDJYPTHu23c4OPtv0+677DFoyDqhiyUtrTySOzR6/zwJE63FOxct3XM7csqPjRD4Dun/Pmq4DODqXvniz7nGhkqhyTLYpANR9D2gHGbwBOcMmsxe7pew/jp43FhqfC+v/0ZxVtlsAPNRLSBXczGRiNNyqRAEdHyZ6CdAXraEkAvAFKjRP1DJYvTx8PvAtuwKexESQhwbI2w8WORmyqDo6oMFbyXcVuQ5XVDy3Tb7g51OqQLCfKQQXhotSVZk7zt5Na4SLwHKssmvsLMXXoXFkWYJfzqZObfaoEGPnhw+QwtTqoIN7Vk5gPRfNNthVJHKn7hZBobOY=
+install: true
+
+# https://medium.com/mobileforgood/patterns-for-continuous-integration-with-docker-on-travis-ci-71857fff14c5
+before_script:
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+- export IMAGE_NAME=cbonami/nifi-registry
+- docker pull "$IMAGE_NAME" || true
+
+script:
+- docker build -t $IMAGE_NAME:$COMMIT .
+
+after_script:
+- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:travis-$TRAVIS_BUILD_NUMBER
+
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}
+  on:
+    branch: master

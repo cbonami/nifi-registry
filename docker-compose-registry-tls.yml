@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  nifi-reg:
+    image: apache/nifi-registry:0.2.0
+    ports:
+      - "18443:18443"
+    environment:
+      - AUTH=tls
+      - KEYSTORE_PATH=/opt/certs/keystore.jks
+      - KEYSTORE_TYPE=JKS
+      - KEYSTORE_PASSWORD=A1VVfnafSZ14BpHJ6BOJqDzMafuKKP4Xcs7cosSEZ2o
+      - TRUSTSTORE_PATH=/opt/certs/truststore.jks
+      - TRUSTSTORE_PASSWORD=eCiNBeBJupEet2/URJ894jEf52Z1gZpjPoJaLfj7HCk
+      - TRUSTSTORE_TYPE=JKS
+      - INITIAL_ADMIN_IDENTITY='CN=sys_admin, OU=NIFI'
+    volumes:
+      - ./nifi-reg/certs/nifi-registry:/opt/certs
