@@ -21,12 +21,15 @@ script:
 - docker build -t $IMAGE_NAME:$COMMIT .
 
 after_script:
+- docker images
+
+before_deploy:
 - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
 - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:travis-$TRAVIS_BUILD_NUMBER
 
 deploy:
   provider: script
-  script: docker push "${IMAGE_NAME}"
+  script: docker push $IMAGE_NAME
   on:
     branch: master
