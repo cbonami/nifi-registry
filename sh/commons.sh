@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+echo "commons.sh"
+
 # 1 - value to search for
 # 2 - value to replace
 # 3 - file to perform replacement inline
