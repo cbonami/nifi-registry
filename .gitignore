@@ -109,3 +109,4 @@ nifi-reg/certs/*
 nifi-reg/db_storage
 nifi-reg/flow_storage
 nifi-toolkit*
+.env
