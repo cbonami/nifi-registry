@@ -73,5 +73,6 @@ You're in.
 
 ## Links
 
-* [NIFI Registry SysAdmin Guide](https://nifi.apache.org/docs/nifi-registry-docs/html/administration-guide.html#database-properties)
+* [NIFI Registry SysAdmin Guide](https://nifi.apache.org/docs/nifi-registry-docs/html/administration-guide.html)
 * [Using Git with NIFI Registry](https://dzone.com/articles/quick-tip-using-git-with-nifi-registry-in-docker)
+* https://pierrevillard.com/2018/04/09/automate-workflow-deployment-in-apache-nifi-with-the-nifi-registry/
