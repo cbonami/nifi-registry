@@ -1,5 +1,7 @@
 FROM openjdk:8-jdk-slim
 
+ENV UID=1000
+ENV GID=1000
 ARG NIFI_REGISTRY_VERSION=0.2.0
 ARG MIRROR=https://archive.apache.org/dist
 
@@ -14,7 +16,7 @@ ADD lib/ ${NIFI_REGISTRY_BASE_DIR}/lib/
 
 # Setup NiFi-Registry user
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
-    && useradd --shell /bin/bash -u 1000 -g 1000 -m nifi \
+    && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && chown -R nifi:nifi ${NIFI_REGISTRY_BASE_DIR} \
     && apt-get update -y \
     && apt-get install -y curl jq xmlstarlet
