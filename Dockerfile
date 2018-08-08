@@ -13,7 +13,7 @@ ADD sh/ ${NIFI_REGISTRY_BASE_DIR}/scripts/
 RUN chmod +x ${NIFI_REGISTRY_BASE_DIR}/scripts/*.sh
 
 # jdbc driver
-ADD lib/ ${NIFI_REGISTRY_HOME_DIR}/lib/bootstrap/
+ADD lib/ ${NIFI_REGISTRY_BASE_DIR}/jdbc/
 
 # Setup NiFi-Registry user
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
