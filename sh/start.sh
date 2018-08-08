@@ -8,7 +8,10 @@ scripts_dir='/opt/nifi-registry/scripts'
 prop_replace 'nifi.registry.web.http.port'      "${NIFI_REGISTRY_WEB_HTTP_PORT:-18080}"
 prop_replace 'nifi.registry.web.http.host'      "${NIFI_REGISTRY_WEB_HTTP_HOST:-$HOSTNAME}"
 
-. ${scripts_dir}/update_database.sh
+. "${scripts_dir}/update_database.sh"
+
+echo "-------------------------------------------------------------------------------------"
+cat  /opt/nifi-registry/nifi-registry-0.2.0/conf/nifi-registry.properties
 
 # Check if we are secured or unsecured
 case ${AUTH} in
@@ -28,6 +31,9 @@ case ${AUTH} in
 esac
 
 . "${scripts_dir}/update_flow_provider.sh"
+
+echo "-------------------------------------------------------------------------------------"
+cat  /opt/nifi-registry/nifi-registry-0.2.0/conf/nifi-registry.properties
 
 # Continuously provide logs so that 'docker logs' can produce them
 tail -F "${NIFI_REGISTRY_HOME}/logs/nifi-registry-app.log" &

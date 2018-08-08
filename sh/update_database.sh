@@ -3,7 +3,7 @@ prop_replace 'nifi.registry.db.url'                         "${NIFI_REGISTRY_DB_
 prop_replace 'nifi.registry.db.driver.class'                "${NIFI_REGISTRY_DB_CLASS:-org.h2.Driver}"
 prop_replace 'nifi.registry.db.driver.directory'            "${NIFI_REGISTRY_DB_DIR:-}"
 
-echo "postgres_pasword ${POSTGRES_PASSWORD}"
+echo "postgres_password ${POSTGRES_PASSWORD}"
 echo "NIFI_REGISTRY_DB_PASS ${NIFI_REGISTRY_DB_PASS}"
 
 prop_replace 'nifi.registry.db.driver.username'             "${NIFI_REGISTRY_DB_USER:-nifireg}"
