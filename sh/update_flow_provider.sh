@@ -1,7 +1,12 @@
 #!/bin/sh -e
 
+echo "update_flow_provider.sh 1"
+
 providers_file=${NIFI_REGISTRY_HOME}/conf/providers.xml
 property_xpath='/providers/flowPersistenceProvider'
+
+echo "update_flow_provider.sh $providers_file"
+cat $providers_file
 
 add_property() {
   property_name=$1
@@ -12,6 +17,8 @@ add_property() {
   fi
 }
 
+echo "update_flow_provider.sh 2"
+
 xmlstarlet ed --inplace -u "${property_xpath}/property[@name='Flow Storage Directory']" -v "${NIFI_REGISTRY_FLOW_STORAGE_DIR:-./flow_storage}" "${providers_file}"
 
 case ${NIFI_REGISTRY_FLOW_PROVIDER} in
@@ -19,6 +26,7 @@ case ${NIFI_REGISTRY_FLOW_PROVIDER} in
         xmlstarlet ed --inplace -u "${property_xpath}/class" -v "org.apache.nifi.registry.provider.flow.FileSystemFlowPersistenceProvider" "${providers_file}"
         ;;
     git)
+        echo "update_flow_provider.sh 3"
         xmlstarlet ed --inplace -u "${property_xpath}/class" -v "org.apache.nifi.registry.provider.flow.git.GitFlowPersistenceProvider" "${providers_file}"
         add_property "Remote To Push"  "${NIFI_REGISTRY_GIT_REMOTE:-}"
         add_property "Remote Access User"  "${NIFI_REGISTRY_GIT_USER:-}"

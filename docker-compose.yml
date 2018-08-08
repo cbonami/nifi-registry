@@ -20,6 +20,7 @@ services:
       - NIFI_REGISTRY_DB_PASS=${POSTGRES_PASSWORD}
       - NIFI_REGISTRY_DB_MAX_CONNS=5
       - NIFI_REGISTRY_DB_DEBUG_SQL=false
+      - NIFI_REGISTRY_FLOW_STORAGE_DIR=/flow_storage
     volumes:
       - ./nifi-reg/flow_storage:/flow_storage
 
