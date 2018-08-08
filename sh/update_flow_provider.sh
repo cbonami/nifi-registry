@@ -13,7 +13,7 @@ add_property() {
   property_value=$2
 
   if [ -n "${property_value}" ]; then
-    xmlstarlet ed --subnode "/providers/flowPersistenceProvider" --type elem -n property -v "${property_value}" providers.xml | xmlstarlet ed --subnode "/providers/flowPersistenceProvider/property[not(name)]" --type attr -n name -v "${property_name}"
+    xmlstarlet ed --subnode "/providers/flowPersistenceProvider" --type elem -n property -v "${property_value}" "${providers_file}" | xmlstarlet ed --subnode "/providers/flowPersistenceProvider/property[not(name)]" --type attr -n name -v "${property_name}"
   fi
 }
 
@@ -28,8 +28,12 @@ case ${NIFI_REGISTRY_FLOW_PROVIDER} in
     git)
         echo "update_flow_provider.sh 3"
         xmlstarlet ed --inplace -u "${property_xpath}/class" -v "org.apache.nifi.registry.provider.flow.git.GitFlowPersistenceProvider" "${providers_file}"
+        echo "update_flow_provider.sh 4"
         add_property "Remote To Push"  "${NIFI_REGISTRY_GIT_REMOTE:-}"
+        echo "update_flow_provider.sh 5"
         add_property "Remote Access User"  "${NIFI_REGISTRY_GIT_USER:-}"
+        echo "update_flow_provider.sh 6"
         add_property "Remote Access Password"    "${NIFI_REGISTRY_GIT_PASSWORD:-}"
+        echo "update_flow_provider.sh end"
         ;;
 esac
