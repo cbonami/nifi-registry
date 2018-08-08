@@ -1,22 +1,14 @@
 #!/bin/sh -e
 
-echo "start.sh 1"
-
 scripts_dir='/opt/nifi-registry/scripts'
 
 [ -f "${scripts_dir}/common.sh" ] && . "${scripts_dir}/common.sh"
-
-echo "start.sh 2"
 
 # Establish baseline properties
 prop_replace 'nifi.registry.web.http.port'      "${NIFI_REGISTRY_WEB_HTTP_PORT:-18080}"
 prop_replace 'nifi.registry.web.http.host'      "${NIFI_REGISTRY_WEB_HTTP_HOST:-$HOSTNAME}"
 
-echo "start.sh 3"
-
 . ${scripts_dir}/update_database.sh
-
-echo "start.sh 4"
 
 # Check if we are secured or unsecured
 case ${AUTH} in
@@ -35,11 +27,7 @@ case ${AUTH} in
         ;;
 esac
 
-echo "start.sh 5"
-
 . "${scripts_dir}/update_flow_provider.sh"
-
-echo "start.sh 6"
 
 # Continuously provide logs so that 'docker logs' can produce them
 tail -F "${NIFI_REGISTRY_HOME}/logs/nifi-registry-app.log" &
