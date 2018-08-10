@@ -30,7 +30,10 @@ $ oc env dc/nifi-registry NIFI_REGISTRY_DB_URL=jdbc:postgresql://172.30.229.191:
   NIFI_REGISTRY_DB_DEBUG_SQL=false
 
 $ oc env dc/nifi-registry NIFI_REGISTRY_FLOW_PROVIDER=git \
-    NIFI_REGISTRY_GIT_REMOTE=https://github.com/cbonami/nifi-flows.git \
-    NIFI_REGISTRY_GIT_USER=cbonami
+    NIFI_REGISTRY_GIT_REMOTE=origin \
+    NIFI_REGISTRY_GIT_USER=cbonami \
+    NIFI_REGISTRY_GIT_PASSWORD=Asterope123 \
+    NIFI_REGISTRY_FLOW_STORAGE_DIR=./flow_storage
+    
   
   

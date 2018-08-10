@@ -2,6 +2,7 @@ FROM openjdk:8-jdk-slim
 
 ARG NIFI_REGISTRY_VERSION=0.2.0
 ARG MIRROR=https://archive.apache.org/dist
+ARG GIT_REPO=https://github.com/cbonami/nifi-flows.git
 
 ENV NIFI_REGISTRY_BASE_DIR=/opt/nifi-registry
 ENV NIFI_REGISTRY_HOME=${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION} \
@@ -24,7 +25,7 @@ RUN curl -fSL ${MIRROR}/${NIFI_REGISTRY_BINARY_URL} -o ${NIFI_REGISTRY_BASE_DIR}
     && rm ${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION}-bin.tar.gz
 
 # unfortunately nifi registry wants the folder to be git-initialized up front
-RUN mkdir -p ${NIFI_REGISTRY_HOME}/flow_storage && git init ${NIFI_REGISTRY_HOME}/flow_storage
+RUN mkdir -p ${NIFI_REGISTRY_HOME}/flow_storage && cd ${NIFI_REGISTRY_HOME}/flow_storage && git init && git remote add origin ${GIT_REPO}
 
 # prevent 'Permission Denied' on OpenShift
 RUN chmod -R 0777 ${NIFI_REGISTRY_HOME}

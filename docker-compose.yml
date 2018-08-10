@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   nifi-reg:
-    image: cbonami/nifi-registry:openshift
+    image: cbonami/nifi-registry:latest
     links:
       - db
     ports:
