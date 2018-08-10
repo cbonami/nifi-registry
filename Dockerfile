@@ -15,13 +15,16 @@ ADD lib/ ${NIFI_REGISTRY_BASE_DIR}/jdbc/
 
 # Setup NiFi-Registry user
 RUN apt-get update -y \
-    && apt-get install -y curl jq xmlstarlet
+    && apt-get install -y curl jq xmlstarlet git
 
 # Download, validate, and expand Apache NiFi-Registry binary.
 RUN curl -fSL ${MIRROR}/${NIFI_REGISTRY_BINARY_URL} -o ${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION}-bin.tar.gz \
     && echo "$(curl ${MIRROR}/${NIFI_REGISTRY_BINARY_URL}.sha256) *${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION}-bin.tar.gz" | sha256sum -c - \
     && tar -xvzf ${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION}-bin.tar.gz -C ${NIFI_REGISTRY_BASE_DIR} \
     && rm ${NIFI_REGISTRY_BASE_DIR}/nifi-registry-${NIFI_REGISTRY_VERSION}-bin.tar.gz
+
+# unfortunately nifi registry wants the folder to be git-initialized up front
+RUN mkdir -p ${NIFI_REGISTRY_HOME}/flow_storage && git init ${NIFI_REGISTRY_HOME}/flow_storage
 
 # prevent 'Permission Denied' on OpenShift
 RUN chmod -R 0777 ${NIFI_REGISTRY_HOME}
