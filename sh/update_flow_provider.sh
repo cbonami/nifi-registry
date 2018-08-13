@@ -32,8 +32,3 @@ case ${NIFI_REGISTRY_FLOW_PROVIDER} in
         add_property "Remote Access Password"    "${NIFI_REGISTRY_GIT_PASSWORD:-}"
         ;;
 esac
-
-
-
-xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider" --type elem -n property -v "bla" "./test.xml"
-xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider/property[not(name)]" --type attr -n name -v "Flow Storage Directory" "./test.xml"
