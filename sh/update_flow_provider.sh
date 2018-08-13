@@ -13,9 +13,10 @@ add_property() {
     echo "add_property 1"
     xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider" --type elem -n propertytemp -v "${property_value}" "${providers_file}"
     echo "add_property 2"
-    xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider/propertytemp" --type attr -v "${property_name}" "${providers_file}"
+    xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider/propertytemp" --type attr -n name -v "${property_name}" "${providers_file}"
     echo "add_property 3"
-    xmlstarlet ed --inplace --r "/providers/flowPersistenceProvider/propertytemp" -v "property" "${providers_file}"
+    xmlstarlet ed --inplace -r "/providers/flowPersistenceProvider/propertytemp" -v "property" "${providers_file}"
+    echo "add_property done"
   fi
 }
 
@@ -35,3 +36,7 @@ case ${NIFI_REGISTRY_FLOW_PROVIDER} in
         add_property "Remote Access Password"    "${NIFI_REGISTRY_GIT_PASSWORD:-}"
         ;;
 esac
+
+# xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider" --type elem -n propertytemp -v "origin" "./test.xml"
+# xmlstarlet ed --inplace --subnode "/providers/flowPersistenceProvider/propertytemp" --type attr -n name -v "Remote To Push" "./test.xml"
+# xmlstarlet ed --inplace -r "/providers/flowPersistenceProvider/propertytemp" -v "property" "./test.xml"
