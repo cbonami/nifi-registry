@@ -1,0 +1,130 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: '2018-08-10T12:16:51Z'
+  generation: 11
+  labels:
+    app: nifi-registry
+  name: nifi-registry
+  namespace: nifi
+  resourceVersion: '3250645'
+  selfLink: /apis/apps.openshift.io/v1/namespaces/nifi/deploymentconfigs/nifi-registry
+  uid: 4318bc93-9c97-11e8-8eaa-005056a6ce86
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: nifi-registry
+    deploymentconfig: nifi-registry
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: nifi-registry
+        deploymentconfig: nifi-registry
+    spec:
+      containers:
+      - env:
+        - name: NIFI_REGISTRY_DB_URL
+          value: 'jdbc:postgresql://172.30.229.191:5432/nifireg'
+        - name: NIFI_REGISTRY_DB_CLASS
+          value: org.postgresql.Driver
+        - name: NIFI_REGISTRY_DB_DIR
+          value: /opt/nifi-registry/jdbc
+        - name: NIFI_REGISTRY_DB_USER
+          value: nifireg
+        - name: NIFI_REGISTRY_DB_PASS
+          value: verysecret
+        - name: NIFI_REGISTRY_DB_MAX_CONNS
+          value: '5'
+        - name: NIFI_REGISTRY_DB_DEBUG_SQL
+          value: 'false'
+        - name: NIFI_REGISTRY_FLOW_PROVIDER
+          value: git
+        - name: NIFI_REGISTRY_GIT_REMOTE
+          value: origin
+        - name: NIFI_REGISTRY_GIT_USER
+          value: cbonami
+        - name: NIFI_REGISTRY_GIT_PASSWORD
+          value: Asterope123
+        - name: NIFI_REGISTRY_FLOW_STORAGE_DIR
+          value: ./flow_storage
+        envFrom:
+        - secretRef:
+            name: postgresql-persistent-bdcpl-credentials-5jq2a
+        image: >-
+          cbonami/nifi-registry@sha256:83cb78f1d9174b2cb8886d66d44a77b6492584ed18fb9cd0cfffd42f188f0510
+        imagePullPolicy: IfNotPresent
+        name: nifi-registry
+        ports:
+        - containerPort: 18080
+          protocol: TCP
+        - containerPort: 18443
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /flow_storage
+          name: flowstorage
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: flowstorage
+        persistentVolumeClaim:
+          claimName: nifireg
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - nifi-registry
+      from:
+        kind: ImageStreamTag
+        name: 'nifi-registry:openshift'
+        namespace: nifi
+      lastTriggeredImage: >-
+        cbonami/nifi-registry@sha256:83cb78f1d9174b2cb8886d66d44a77b6492584ed18fb9cd0cfffd42f188f0510
+    type: ImageChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: '2018-08-10T12:57:11Z'
+    lastUpdateTime: '2018-08-10T12:57:11Z'
+    message: Deployment config has minimum availability.
+    status: 'True'
+    type: Available
+  - lastTransitionTime: '2018-08-13T06:09:44Z'
+    lastUpdateTime: '2018-08-13T06:09:45Z'
+    message: replication controller "nifi-registry-10" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: 'True'
+    type: Progressing
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 10
+  observedGeneration: 11
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1
