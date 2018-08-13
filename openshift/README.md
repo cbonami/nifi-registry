@@ -29,7 +29,7 @@ oc create secret generic dockerhub \
 ## Secrets
 
 ```bash
-oc create secret generic github-nifi-registry --from-literal=NIFI_REGISTRY_GIT_PASSWORD=85e7756e6112ce7f12d9b4350e8e94924211ac5c
+oc create secret generic github-nifi-registry --from-literal=NIFI_REGISTRY_GIT_PASSWORD=xxxxxxxxx
 ```
 
 ## NiFi
