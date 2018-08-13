@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   nifi-reg:
-    image: cbonami/nifi-registry:latest
+    image: cbonami/nifi-registry:openshift
     links:
       - db
     ports:
@@ -13,7 +13,7 @@ services:
       - NIFI_REGISTRY_GIT_REMOTE=https://github.com/cbonami/nifi-flows.git
       - NIFI_REGISTRY_GIT_USER=cbonami
       - NIFI_REGISTRY_GIT_PASSWORD=${GIT_PASSWORD}
-      - NIFI_REGISTRY_FLOW_STORAGE_DIR=/flow_storage
+      - NIFI_REGISTRY_FLOW_STORAGE_DIR=./flow_storage
       - NIFI_REGISTRY_DB_URL=jdbc:postgresql://db:5432/nifireg
       - NIFI_REGISTRY_DB_CLASS=org.postgresql.Driver
       - NIFI_REGISTRY_DB_DIR=/opt/nifi-registry/jdbc
